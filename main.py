@@ -61,7 +61,8 @@ if __name__ == '__main__':
     get_all_tracks()
     print(
         f'Fetching liked songs successfully finished. Found {len(likes)} tracks.')
-    split_likes = list(mit.chunked(likes, SPOTIFY_PLAYLIST_LIMIT))
+    split_likes = list(mit.chunked(
+        list(reversed(likes)), SPOTIFY_PLAYLIST_LIMIT))
     print(f'{len(split_likes)} playlists will be created.')
     print('Creating playlists...', end='\r')
     for i in range(len(split_likes)):
@@ -73,7 +74,7 @@ if __name__ == '__main__':
             except:
                 print('Couldn\'t set playlist image. Continuing without image.')
         split_playlist = list(mit.chunked(
-            split_likes[i], SPOTIFY_API_PLAYLIST_TRACK_COUNT_LIMIT))
+            list(reversed(split_likes[i])), SPOTIFY_API_PLAYLIST_TRACK_COUNT_LIMIT))
         for j in range(len(split_playlist)):
             sp.playlist_add_items(
                 playlist['id'], [track['track']['id'] for track in split_playlist[j]])
